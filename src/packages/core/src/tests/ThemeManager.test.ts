@@ -49,4 +49,27 @@ describe('ThemeManager', () => {
     themeManager.toggleTheme()
     expect(documentElement.style.getPropertyValue('--transition-duration')).toBe('300ms')
   })
+
+  it('should not change theme when setting to current theme', () => {
+    themeManager.setTheme('dark')
+    expect(documentElement.classList.contains('dark')).toBe(true)
+
+
+    themeManager.setTheme('dark')
+    expect(documentElement.classList.contains('dark')).toBe(true)
+    expect(documentElement.classList.contains('light')).toBe(false)
+  })
+
+  it('should toggle theme correctly when called multiple times', () => {
+    expect(documentElement.classList.contains('light')).toBe(true)
+
+    themeManager.toggleTheme()
+    expect(documentElement.classList.contains('dark')).toBe(true)
+
+    themeManager.toggleTheme()
+    expect(documentElement.classList.contains('light')).toBe(true)
+
+    themeManager.toggleTheme()
+    expect(documentElement.classList.contains('dark')).toBe(true)
+  })
 })

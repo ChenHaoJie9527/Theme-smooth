@@ -22,4 +22,8 @@ export class ThemeManager {
         this.currentTheme = theme
         this.applyTheme()
     }
+
+    getTheme() {
+        return this.currentTheme
+    }
 }
