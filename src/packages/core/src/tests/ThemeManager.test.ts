@@ -9,7 +9,7 @@ describe('ThemeManager', () => {
     // 模拟 document.documentElement
     documentElement = document.createElement('html')
     vi.spyOn(document, 'documentElement', 'get').mockReturnValue(documentElement)
-    
+
     themeManager = new ThemeManager()
   })
 
@@ -71,5 +71,11 @@ describe('ThemeManager', () => {
 
     themeManager.toggleTheme()
     expect(documentElement.classList.contains('dark')).toBe(true)
+  })
+
+  it('should return current theme', () => {
+    expect(themeManager.getTheme()).toBe('light')
+    themeManager.setTheme('dark')
+    expect(themeManager.getTheme()).toBe('dark')
   })
 })
