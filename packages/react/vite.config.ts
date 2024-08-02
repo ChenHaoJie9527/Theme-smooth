@@ -8,18 +8,18 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ThemeSmoothReact',
-      fileName: 'theme-smooth-react'
+      name: 'ThemeSwitcherReact',
+      fileName: 'theme-switcher-react'
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@theme-smooth/core'],
+      external: ['react', 'react-dom', '@theme-switcher/core'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          '@theme-smooth/core': 'ThemeSmoothCore'
+          '@theme-switcher/core': 'ThemeSwitcherCore'
         }
       }
     }
-  }
+  },
 })

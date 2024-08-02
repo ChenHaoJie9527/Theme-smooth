@@ -18,7 +18,7 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "test": "vitest run",
+        "test": "vitest run tests",
         "test:watch": "vitest"
     },
     "peerDependencies": {
