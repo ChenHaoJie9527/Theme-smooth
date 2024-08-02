@@ -1,14 +1,21 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi, Mock } from 'vitest'
 import { ThemeManager } from '../ThemeManager'
 
 describe('ThemeManager', () => {
   let themeManager: ThemeManager
   let documentElement: HTMLElement
+  let localStorageMock: { getItem: Mock, setItem: Mock }
 
   beforeEach(() => {
     // 模拟 document.documentElement
     documentElement = document.createElement('html')
     vi.spyOn(document, 'documentElement', 'get').mockReturnValue(documentElement)
+
+    localStorageMock = {
+      getItem: vi.fn(),
+      setItem: vi.fn()
+    };
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
     themeManager = new ThemeManager()
   })
@@ -83,5 +90,30 @@ describe('ThemeManager', () => {
     themeManager.setTransitionDuration(500)
     themeManager.toggleTheme()
     expect(documentElement.style.getPropertyValue('--transition-duration')).toBe('500ms')
+  })
+
+  it('should persist theme across page reloads', () => {
+    // 模拟首次加载，没有保存的主题
+    localStorageMock.getItem.mockReturnValue(null)
+    themeManager = new ThemeManager()
+    expect(themeManager.getTheme()).toBe('light')
+
+    // 切换主题并验证是否保存
+    themeManager.toggleTheme()
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('theme-preference', 'dark')
+    expect(documentElement.classList.contains('dark')).toBe(true)
+
+    // 模拟页面重新加载，有保存的主题
+    localStorageMock.getItem.mockReturnValue('dark')
+    themeManager = new ThemeManager()
+    expect(themeManager.getTheme()).toBe('dark')
+    expect(documentElement.classList.contains('dark')).toBe(true)
+  })
+
+  it('should apply saved theme on initialization', () => {
+    localStorageMock.getItem.mockReturnValue('dark')
+    themeManager = new ThemeManager()
+    expect(themeManager.getTheme()).toBe('dark')
+    expect(documentElement.classList.contains('dark')).toBe(true)
   })
 })
