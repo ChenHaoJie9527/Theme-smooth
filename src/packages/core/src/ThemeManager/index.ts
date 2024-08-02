@@ -26,4 +26,8 @@ export class ThemeManager {
     getTheme() {
         return this.currentTheme
     }
+
+    setTransitionDuration(duration: number) {
+        this.transitionDuration = duration
+    }
 }

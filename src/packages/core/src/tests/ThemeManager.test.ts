@@ -78,4 +78,10 @@ describe('ThemeManager', () => {
     themeManager.setTheme('dark')
     expect(themeManager.getTheme()).toBe('dark')
   })
+
+  it('should set custom transition duration', () => {
+    themeManager.setTransitionDuration(500)
+    themeManager.toggleTheme()
+    expect(documentElement.style.getPropertyValue('--transition-duration')).toBe('500ms')
+  })
 })
