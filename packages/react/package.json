@@ -1,0 +1,45 @@
+{
+    "name": "@theme-smooth/react",
+    "version": "1.0.0",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/theme-smooth-react.umd.cjs",
+    "module": "./dist/theme-smooth-react.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/theme-smooth-react.js",
+            "require": "./dist/theme-smooth-react.umd.cjs"
+        }
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "peerDependencies": {
+        "react": "^17.0.0 || ^18.0.0",
+        "react-dom": "^17.0.0 || ^18.0.0"
+    },
+    "dependencies": {
+        "@theme-smooth/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.28",
+        "@types/react-dom": "^18.0.11",
+        "@vitejs/plugin-react": "^3.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "typescript": "^5.2.2",
+        "vite": "5.0.13",
+        "vite-plugin-dts": "4.0.0-beta.2",
+        "vitest": "^2.0.5",
+        "@testing-library/react": "^14.0.0",
+        "@testing-library/react-hooks": "^8.0.1",
+        "@types/node": "^22.0.2"
+    }
+}
