@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-devDependencies:
-  typescript:
-    specifier: ^5.2.2
-    version: 5.5.4
-  vite:
-    specifier: ^5.3.4
-    version: 5.3.5
+importers:
+
+  .:
+    devDependencies:
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.4
+      vite:
+        specifier: ^5.3.4
+        version: 5.3.5
 
 packages:
 
