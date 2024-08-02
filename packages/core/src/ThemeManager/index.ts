@@ -36,6 +36,14 @@ export class ThemeManager {
         this.applyTheme()
     }
 
+    subscribe(callback?: () => void) {
+        callback?.()
+    }
+
+    unsubscribe(callback?: () => void) {
+        callback?.()
+    }
+
     private saveTheme() {
         localStorage.setItem(ThemeManager.THEME_STORAGE_KEY, this.currentTheme)
     }
