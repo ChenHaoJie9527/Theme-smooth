@@ -4,20 +4,22 @@ import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 
 export default defineConfig({
-  plugins: [react(), dts()],
+  plugins: [react(), dts({
+    insertTypesEntry: true,
+  })],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ThemeSwitcherReact',
-      fileName: 'theme-switcher-react'
+      name: 'ThemeSmoothReact',
+      fileName: (format) => `theme-smooth-react.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@theme-switcher/core'],
+      external: ['react', 'react-dom', '@theme-smooth/core'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          '@theme-switcher/core': 'ThemeSwitcherCore'
+          '@theme-smooth/core': 'ThemeSmoothCore'
         }
       }
     }
