@@ -11,6 +11,7 @@ export class ThemeManager {
     applyTheme() {
         const root = document.documentElement
         root.style.setProperty('--transition-duration', `${this.transitionDuration}ms`)
+        root.setAttribute('data-theme', this.currentTheme)
         root.classList.remove('light', 'dark')
         root.classList.add(this.currentTheme)
     }
