@@ -7,7 +7,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ThemeSmoothCore',
-      fileName: (format) => `theme-smooth-${format}.js`    
+      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`,   
     },
     rollupOptions: {
       external: ["tests", "vitest", "react", "react-dom"],
@@ -15,9 +15,16 @@ export default defineConfig({
         globals: {
           react: "React",
           'react-dom': "ReactDom"
-        }
+        },
+        assetFileNames(chunkInfo) {
+          if (chunkInfo.name === 'style.css') {
+            return 'theme-smooth.css'
+          }
+          return chunkInfo.name
+        },
       }
-    }
+    },
+    cssCodeSplit: false,
   },
   plugins: [dts({
     exclude: ['**/*.test.ts', '**/*.spec.ts']

@@ -1,15 +1,17 @@
 {
     "name": "@theme-smooth/core",
     "version": "1.0.0",
-    "main": "./dist/theme-smooth-core.umd.cjs",
+    "main": "./dist/index.js",
     "types": "dist/index.d.ts",
-    "module": "./dist/theme-smooth-core.es.js",
+    "style": "./dist/theme-smooth.css",
+    "module": "./dist/index.mjs",
     "exports": {
         ".": {
-            "import": "./dist/theme-smooth-core.js",
-            "require": "./dist/theme-smooth-core.umd.cjs"
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
         },
-        "./style.css": "./dist/style.css"
+        "./style.css": "./dist/theme-smooth.css"
     },
     "files": [
         "dist"
