@@ -33,10 +33,15 @@ export const useTheme = () => {
         setTheme(newTheme)
     }, [themeManager])
 
+    const getTheme = () => {
+        return themeManager.getTheme()
+    }
+
     return {
         theme,
         toggleTheme,
         setTransitionDuration,
         setTheme: setThemeManually,
+        getTheme
     }
 }
