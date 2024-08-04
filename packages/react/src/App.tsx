@@ -9,7 +9,9 @@ export default function App() {
 
   useEffect(() => {
     const updateTheme = () => {
-      setCurrentTheme(getTheme());
+      const theme = getTheme()
+      setCurrentTheme(theme);
+      document.documentElement.setAttribute("data-theme", theme);
     };
     // 初始化主题
     updateTheme();
