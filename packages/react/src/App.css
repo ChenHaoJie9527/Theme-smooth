@@ -1,0 +1,29 @@
+.App {
+    text-align: center;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all var(--transition-duration, 300ms) ease;
+  }
+  
+  .App.light {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  .App.dark {
+    background-color: #282c34;
+    color: #ffffff;
+  }
+  
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  input {
+    margin: 10px;
+    padding: 5px;
+    font-size: 16px;
+  }
+  
