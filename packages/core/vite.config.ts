@@ -7,12 +7,15 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ThemeSmoothCore',
-      fileName: 'theme-smooth-core'
+      fileName: (format) => `theme-smooth-${format}.js`    
     },
     rollupOptions: {
-      external: ["tests", "vitest"],
+      external: ["tests", "vitest", "react", "react-dom"],
       output: {
-        globals: {}
+        globals: {
+          react: "React",
+          'react-dom': "ReactDom"
+        }
       }
     }
   },

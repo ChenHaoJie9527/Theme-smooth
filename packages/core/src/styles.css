@@ -1,0 +1,41 @@
+:root {
+    --text-color-light: #000000;
+    --bg-color-light: #ffffff;
+    --text-color-dark: #ffffff;
+    --bg-color-dark: #282c34;
+  }
+  
+  body {
+    transition-property: color, background-color;
+    transition-duration: var(--transition-duration);
+    transition-timing-function: ease;
+  }
+  
+  body[data-theme="light"] {
+    color: var(--text-color-light);
+    background-color: var(--bg-color-light);
+  }
+  
+  body[data-theme="dark"] {
+    color: var(--text-color-dark);
+    background-color: var(--bg-color-dark);
+  }
+  
+  /* 过渡效果样式 */
+  body[data-transition="fade"] {
+    transition-property: opacity, color, background-color;
+  }
+  
+  body[data-transition="slide"] {
+    transition-property: transform, color, background-color;
+  }
+  
+  /* ... 其他过渡效果样式 ... */
+  
+  /* 过渡效果动画 */
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  
+  /* ... 其他动画 ... */

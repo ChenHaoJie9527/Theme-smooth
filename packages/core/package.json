@@ -3,12 +3,13 @@
     "version": "1.0.0",
     "main": "./dist/theme-smooth-core.umd.cjs",
     "types": "dist/index.d.ts",
-    "module": "./dist/theme-smooth-core.js",
+    "module": "./dist/theme-smooth-core.es.js",
     "exports": {
         ".": {
             "import": "./dist/theme-smooth-core.js",
             "require": "./dist/theme-smooth-core.umd.cjs"
-        }
+        },
+        "./style.css": "./dist/style.css"
     },
     "files": [
         "dist"
@@ -30,5 +31,9 @@
         "vite": "^5.3.4",
         "vite-plugin-dts": "4.0.0-beta.2",
         "vitest": "^2.0.5"
+    },
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
     }
 }
