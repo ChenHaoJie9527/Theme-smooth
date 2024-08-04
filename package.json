@@ -9,6 +9,7 @@
     "lint": "pnpm -r lint"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.8",
     "typescript": "^5.2.2"
   },
   "workspaces": [

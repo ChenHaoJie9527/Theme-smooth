@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { ThemeManager } from "@theme-smooth/core"
-
 export const useTheme = () => {
-    const [themeManager] = useState(() => new ThemeManager)
+    const [themeManager] = useState(() => new ThemeManager())
     const [theme, setTheme] = useState(themeManager.getTheme())
 
     useEffect(() => {
         const handleThemeChange = () => {
-            setTheme(themeManager.getTheme());
+            const __theme = themeManager.getTheme()
+            setTheme(__theme);
         };
 
         themeManager.subscribe(handleThemeChange);
@@ -19,12 +19,24 @@ export const useTheme = () => {
 
     }, [themeManager])
 
-    const toggleTheme = () => {
+    const toggleTheme = useCallback(() => {
         themeManager.toggleTheme()
-    }
+        setTheme(themeManager.getTheme())
+    }, [themeManager])
+
+    const setTransitionDuration = useCallback((duration: number) => {
+        themeManager.setTransitionDuration(duration)
+    }, [themeManager])
+
+    const setThemeManually = useCallback((newTheme: 'light' | 'dark') => {
+        themeManager.setTheme(newTheme)
+        setTheme(newTheme)
+    }, [themeManager])
 
     return {
         theme,
-        toggleTheme
+        toggleTheme,
+        setTransitionDuration,
+        setTheme: setThemeManually,
     }
 }
