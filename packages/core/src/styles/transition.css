@@ -1,30 +1,70 @@
-[data-transition="fade"] {
-    transition: opacity var(--transition-duration, 300ms) ease;
+/* 定义过渡组 */
+::view-transition-group(root) {
+  animation-duration: 300ms;
+}
+
+/* 旧视图（当前主题）的动画 */
+::view-transition-old(root) {
+  animation: slide-out 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* 新视图（新主题）的动画 */
+::view-transition-new(root) {
+  animation: slide-in 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* 定义滑出动画 */
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
   }
-  
-  [data-transition="slide"] {
-    transition: transform var(--transition-duration, 300ms) ease;
+  to {
+    transform: translateX(-100%);
   }
-  
-  [data-transition="zoom"] {
-    transition: transform var(--transition-duration, 300ms) ease;
+}
+
+/* 定义滑入动画 */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
   }
-  
-  [data-transition="rotate"] {
-    transition: transform var(--transition-duration, 300ms) ease;
+  to {
+    transform: translateX(0);
   }
-  
-  @keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+}
+
+/* 为反向动画添加一个类 */
+.theme-transition-reverse {
+  view-transition-name: none;
+}
+
+.theme-transition-reverse::view-transition-old(root) {
+  animation-name: slide-out-reverse;
+}
+
+.theme-transition-reverse::view-transition-new(root) {
+  animation-name: slide-in-reverse;
+}
+
+@keyframes slide-out-reverse {
+  from {
+    transform: translateX(0);
   }
-  
-  @keyframes zoomIn {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+  to {
+    transform: translateX(100%);
   }
-  
-  @keyframes rotateIn {
-    from { transform: rotate(-180deg); }
-    to { transform: rotate(0); }
+}
+
+@keyframes slide-in-reverse {
+  from {
+    transform: translateX(-100%);
   }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 确保在过渡期间内容不会溢出 */
+body {
+  overflow-x: hidden;
+}
