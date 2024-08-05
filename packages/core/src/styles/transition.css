@@ -28,3 +28,53 @@
     from { transform: rotate(-180deg); }
     to { transform: rotate(0); }
   }
+
+  /* 添加 view-transition 相关样式 */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--transition-duration, 300ms);
+  }
+
+  .theme-transition-reverse::view-transition-old(root) {
+    animation-name: slide-out-reverse;
+  }
+
+  .theme-transition-reverse::view-transition-new(root) {
+    animation-name: slide-in-reverse;
+  }
+
+  @keyframes slide-out-reverse {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+
+  @keyframes slide-in-reverse {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+
+  ::view-transition-old(root) {
+    animation: slide-out var(--transition-duration, 300ms) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: slide-in var(--transition-duration, 300ms) both;
+  }
+
+  @keyframes slide-out {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+
+  @keyframes slide-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+}
+
+/* 确保在过渡期间内容不会溢出 */
+body {
+  overflow-x: hidden;
+}
+

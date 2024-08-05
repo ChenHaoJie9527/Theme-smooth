@@ -1,4 +1,4 @@
-export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip'
+export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip' | 'view-transition';
 export type Theme = 'light' | 'dark'
 export interface ThemeManagerOPtions {
     initialTheme?: 'light' | 'dark'
@@ -11,6 +11,7 @@ export class ThemeManager {
     private transitionDuration: number = 300
     private static readonly THEME_STORAGE_KEY = 'theme-smooth-preference'
     private transitionEffect: ThemeTransitionEffect;
+    private lastDirection: 'forward' | 'reverse' = 'forward'
 
     constructor(options: ThemeManagerOPtions = {}) {
         this.currentTheme = options.initialTheme || this.getSavedTheme() || 'light'
@@ -30,9 +31,42 @@ export class ThemeManager {
         window.dispatchEvent(new CustomEvent('theme-changed', { detail: this.currentTheme }))
     }
 
-    toggleTheme() {
-        this.setTheme(this.currentTheme === 'light' ? 'dark' : 'light')
+    async toggleTheme() {
+        const newTheme = this.currentTheme === 'light'? 'dark' : 'light'
+        const direction = newTheme === 'light'? 'forward' : 'reverse'
+        
+        if (this.transitionEffect === 'view-transition') {
+            await this.toggleThemeWithViewTransition(newTheme, direction)
+        } else {
+            this.setTheme(newTheme)
+        }
     }
+
+    private async toggleThemeWithViewTransition(newTheme: Theme, direction: 'forward' | 'reverse') {
+        // @ts-ignore (for document.startViewTransition)
+        if (!document.startViewTransition) {
+            this.setTheme(newTheme)
+            return
+        }
+
+        if (direction === 'reverse') {
+            document.documentElement.classList.add('theme-transition-reverse')
+        } else {
+            document.documentElement.classList.remove('theme-transition-reverse')
+        }
+
+        // @ts-ignore
+        const transition = document.startViewTransition(() => {
+            this.setTheme(newTheme)
+        })
+
+        try {
+            await transition.finished
+        } finally {
+            this.lastDirection = direction
+        }
+    }
+
 
     setTheme(theme: Theme) {
         this.currentTheme = theme
