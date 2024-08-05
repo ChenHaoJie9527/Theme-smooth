@@ -1,4 +1,4 @@
-export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip'
+export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip' | 'view-transition';
 export type Theme = 'light' | 'dark'
 export interface ThemeManagerOPtions {
     initialTheme?: 'light' | 'dark'
@@ -34,13 +34,21 @@ export class ThemeManager {
     async toggleTheme() {
         const newTheme = this.currentTheme === 'light'? 'dark' : 'light'
         const direction = newTheme === 'light'? 'forward' : 'reverse'
-        // @ts-ignore
+        
+        if (this.transitionEffect === 'view-transition') {
+            await this.toggleThemeWithViewTransition(newTheme, direction)
+        } else {
+            this.setTheme(newTheme)
+        }
+    }
+
+    private async toggleThemeWithViewTransition(newTheme: Theme, direction: 'forward' | 'reverse') {
+        // @ts-ignore (for document.startViewTransition)
         if (!document.startViewTransition) {
             this.setTheme(newTheme)
             return
         }
 
-        // 根据方向添加或移除反向类
         if (direction === 'reverse') {
             document.documentElement.classList.add('theme-transition-reverse')
         } else {
@@ -54,10 +62,11 @@ export class ThemeManager {
 
         try {
             await transition.finished
-        } finally{
+        } finally {
             this.lastDirection = direction
         }
     }
+
 
     setTheme(theme: Theme) {
         this.currentTheme = theme
