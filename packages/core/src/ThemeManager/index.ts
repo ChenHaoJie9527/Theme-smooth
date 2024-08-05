@@ -1,4 +1,4 @@
-export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip' | 'view-transition';
+export type ThemeTransitionEffect = 'none' | 'view-transition';
 export type Theme = 'light' | 'dark'
 export interface ThemeManagerOPtions {
     initialTheme?: 'light' | 'dark'
@@ -17,10 +17,10 @@ export class ThemeManager {
         this.currentTheme = options.initialTheme || this.getSavedTheme() || 'light'
         this.transitionEffect = options.transitionEffect || 'none'
         this.transitionDuration = options.transitionDuration || 300
-        this.applyTheme()
+        this.applyTheme(this.currentTheme)
     }
 
-    applyTheme() {
+    applyThemeImmediately(newTheme: Theme) {
         const root = document.documentElement
         root.style.setProperty('--transition-duration', `${this.transitionDuration}ms`)
         root.setAttribute('data-theme', this.currentTheme)
@@ -28,18 +28,45 @@ export class ThemeManager {
         root.classList.remove('light', 'dark')
         root.classList.add(this.currentTheme)
 
+        this.currentTheme = newTheme
+        this.saveTheme(newTheme)
         window.dispatchEvent(new CustomEvent('theme-changed', { detail: this.currentTheme }))
+
+    }
+
+    async applyThemeWithTransition(newTheme: Theme) {
+        // @ts-ignore
+        if (typeof document.startViewTransition !== 'function') {
+            this.applyThemeImmediately(newTheme);
+            return;
+        }
+        // @ts-ignore
+        const transition = document.startViewTransition(() => {
+            this.applyThemeImmediately(newTheme);
+        });
+
+        try {
+            await transition.finished;
+        } catch (error) {
+            console.error('View transition failed:', error);
+        }
+
+    }
+
+    async applyTheme(newTheme: Theme) {
+        if (this.transitionEffect === 'view-transition') {
+            await this.applyThemeWithTransition(newTheme);
+
+        } else {
+            this.applyThemeImmediately(newTheme)
+        }
+
+
     }
 
     async toggleTheme() {
-        const newTheme = this.currentTheme === 'light'? 'dark' : 'light'
-        const direction = newTheme === 'light'? 'forward' : 'reverse'
-        
-        if (this.transitionEffect === 'view-transition') {
-            await this.toggleThemeWithViewTransition(newTheme, direction)
-        } else {
-            this.setTheme(newTheme)
-        }
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light'
+        await this.applyTheme(newTheme)
     }
 
     private async toggleThemeWithViewTransition(newTheme: Theme, direction: 'forward' | 'reverse') {
@@ -69,9 +96,7 @@ export class ThemeManager {
 
 
     setTheme(theme: Theme) {
-        this.currentTheme = theme
-        this.saveTheme(theme)
-        this.applyTheme()
+        this.applyTheme(theme)
     }
 
     getTheme(): Theme {
@@ -80,7 +105,6 @@ export class ThemeManager {
 
     setTransitionEffect(effect: ThemeTransitionEffect) {
         this.transitionEffect = effect
-        this.applyTheme()
     }
 
     getTransitionEffect() {
@@ -88,7 +112,6 @@ export class ThemeManager {
     }
     setTransitionDuration(duration: number) {
         this.transitionDuration = duration
-        this.applyTheme()
     }
 
     getTransitionDuration() {
