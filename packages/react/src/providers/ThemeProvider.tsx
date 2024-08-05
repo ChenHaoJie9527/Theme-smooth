@@ -14,7 +14,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
-  const [themeManager] = useState(() => new ThemeManager());
+  const [themeManager] = useState(() => new ThemeManager({
+    transitionEffect: 'view-transition'
+  }));
   const [theme, setTheme] = useState(themeManager.getTheme());
 
   useEffect(() => {
