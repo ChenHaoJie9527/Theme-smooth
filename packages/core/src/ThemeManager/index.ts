@@ -11,6 +11,7 @@ export class ThemeManager {
     private transitionDuration: number = 300
     private static readonly THEME_STORAGE_KEY = 'theme-smooth-preference'
     private transitionEffect: ThemeTransitionEffect;
+    private lastDirection: 'forward' | 'reverse' = 'forward'
 
     constructor(options: ThemeManagerOPtions = {}) {
         this.currentTheme = options.initialTheme || this.getSavedTheme() || 'light'
@@ -30,8 +31,32 @@ export class ThemeManager {
         window.dispatchEvent(new CustomEvent('theme-changed', { detail: this.currentTheme }))
     }
 
-    toggleTheme() {
-        this.setTheme(this.currentTheme === 'light' ? 'dark' : 'light')
+    async toggleTheme() {
+        const newTheme = this.currentTheme === 'light'? 'dark' : 'light'
+        const direction = newTheme === 'light'? 'forward' : 'reverse'
+        // @ts-ignore
+        if (!document.startViewTransition) {
+            this.setTheme(newTheme)
+            return
+        }
+
+        // 根据方向添加或移除反向类
+        if (direction === 'reverse') {
+            document.documentElement.classList.add('theme-transition-reverse')
+        } else {
+            document.documentElement.classList.remove('theme-transition-reverse')
+        }
+
+        // @ts-ignore
+        const transition = document.startViewTransition(() => {
+            this.setTheme(newTheme)
+        })
+
+        try {
+            await transition.finished
+        } finally{
+            this.lastDirection = direction
+        }
     }
 
     setTheme(theme: Theme) {
