@@ -1,4 +1,4 @@
-export type ThemeTransitionEffect = 'none' | 'fade' | 'slide' | 'flip' | 'view-transition';
+export type ThemeTransitionEffect = 'none' | 'view-transition';
 export type Theme = 'light' | 'dark';
 
 export interface ThemeManagerOptions {
