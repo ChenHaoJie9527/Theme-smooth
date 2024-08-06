@@ -15,7 +15,8 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [themeManager] = useState(() => new ThemeManager({
-    transitionEffect: 'view-transition'
+    transitionEffect: 'circle',
+    transitionDuration: 1000
   }));
   const [theme, setTheme] = useState(themeManager.getTheme());
 

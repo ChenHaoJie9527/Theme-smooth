@@ -13,15 +13,7 @@
     animation-name: slide-in-reverse;
   }
 
-  @keyframes slide-out-reverse {
-    from { transform: translateX(0); }
-    to { transform: translateX(100%); }
-  }
-
-  @keyframes slide-in-reverse {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(0); }
-  }
+ 
 
   ::view-transition-old(root) {
     animation: slide-out var(--transition-duration, 300ms) both;
@@ -40,6 +32,31 @@
     from { transform: translateX(100%); }
     to { transform: translateX(0); }
   }
+  @keyframes slide-out-reverse {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+
+  @keyframes slide-in-reverse {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+
+  /* 新增的圆形过渡效果 */
+  [data-transition-effect="circle"]::view-transition-old(root),
+  [data-transition-effect="circle"]::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  [data-transition-effect="circle"]::view-transition-new(root) {
+    animation: var(--transition-duration, 500ms) ease-in-out both circle-in;
+  }
+  @keyframes circle-in {
+    from { clip-path: circle(0% at center); }
+    to { clip-path: circle(100% at center); }
+  }
+
 }
 
 /* 确保在过渡期间内容不会溢出 */
