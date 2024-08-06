@@ -1,4 +1,4 @@
-export type ThemeTransitionEffect = 'none' | 'view-transition';
+export type ThemeTransitionEffect = 'none' | 'view-transition' | 'circle';
 export type Theme = 'light' | 'dark';
 
 export interface ThemeManagerOptions {
@@ -7,18 +7,26 @@ export interface ThemeManagerOptions {
     transitionDuration?: number;
 }
 
+type ThemeChangeCallback = (theme: Theme) => void;
+
 export class ThemeManager {
     private currentTheme: Theme = 'light';
     private transitionDuration: number = 300;
     private static readonly THEME_STORAGE_KEY = 'theme-smooth-preference';
     private transitionEffect: ThemeTransitionEffect;
     private lastDirection: 'forward' | 'reverse' = 'forward';
+    private subscribers: Set<ThemeChangeCallback> = new Set();
+
 
     constructor(options: ThemeManagerOptions = {}) {
         this.currentTheme = options.initialTheme || this.getSavedTheme() || 'light';
         this.transitionEffect = options.transitionEffect || 'none';
         this.transitionDuration = options.transitionDuration || 300;
         this.applyTheme();
+    }
+
+    private notifySubscribers() {
+        this.subscribers.forEach(fn => fn(this.currentTheme));
     }
 
     applyTheme() {
@@ -29,6 +37,8 @@ export class ThemeManager {
         root.classList.remove('light', 'dark');
         root.classList.add(this.currentTheme);
 
+        this.notifySubscribers()
+
         window.dispatchEvent(new CustomEvent('theme-changed', { detail: this.currentTheme }));
     }
 
@@ -36,18 +46,17 @@ export class ThemeManager {
         const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         const direction = newTheme === 'dark' ? 'forward' : 'reverse';
 
-        if (this.transitionEffect === 'view-transition' && 'startViewTransition' in document) {
+        if ((this.transitionEffect === 'view-transition' || this.transitionEffect === 'circle') && 'startViewTransition' in document) {
             await this.toggleThemeWithViewTransition(newTheme, direction);
         } else {
             this.setTheme(newTheme);
         }
+
     }
 
     private async toggleThemeWithViewTransition(newTheme: Theme, direction: 'forward' | 'reverse') {
-        if (direction === 'reverse') {
-            document.documentElement.classList.add('theme-transition-reverse');
-        } else {
-            document.documentElement.classList.remove('theme-transition-reverse');
+        if (this.transitionEffect === 'view-transition') {
+            document.documentElement.classList.toggle('theme-transition-reverse', direction === 'reverse');
         }
 
         // @ts-ignore (for document.startViewTransition)
@@ -60,6 +69,7 @@ export class ThemeManager {
         } finally {
             this.lastDirection = direction;
         }
+
     }
 
     setTheme(theme: Theme) {
@@ -92,6 +102,14 @@ export class ThemeManager {
 
     private saveTheme(theme: Theme) {
         localStorage.setItem(ThemeManager.THEME_STORAGE_KEY, theme);
+    }
+
+    subscribe(fn: ThemeChangeCallback) {
+        this.subscribers.add(fn)
+    }
+
+    unsubscribe(fn: ThemeChangeCallback) {
+        this.subscribers.delete(fn)
     }
 
     private getSavedTheme() {
