@@ -7,13 +7,13 @@ theme-smooth-core是一个开箱即用，已经预设CSS，提供核心方法的
 使用npm:
 
 ```bash
-npm install @your-scope/theme-smooth-core
+npm install @theme-smooth-core
 ```
 
 或者使用yarn:
 
 ```bash
-pnpm add @your-scope/theme-smooth-core
+pnpm add @theme-smooth-core
 ```
 
 ## styles
