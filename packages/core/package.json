@@ -1,7 +1,7 @@
 {
     "name": "@theme-smooth/core",
     "description": "A flexible and customizable UI theme core package for React applications",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "./dist/index.js",
     "types": "dist/index.d.ts",
     "style": "./dist/theme-smooth.css",
